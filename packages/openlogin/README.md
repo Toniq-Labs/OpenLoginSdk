@@ -1,5 +1,3 @@
-# OpenLogin
+# @toniq-labs/openlogin
 
-OpenLogin is a plug & play authentication suite that combines the simplicity of passwordless authentication with the security of non-custodial public key infrastructure (PKI).
-
-Head over to [docs](https://docs.tor.us/open-login/get-started) to get started.
+Fork of [`@toruslabs/openlogin`](https://www.npmjs.com/package/@toruslabs/openlogin). Modified by Toniq Labs to improve stability and fix bugs.

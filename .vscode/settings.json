@@ -1,17 +1,4 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true
-  },
-  "eslint.workingDirectories": [
-    {
-      "directory": "packages/*",
-      "changeProcessCWD": true
-    },
-    {
-      "directory": "examples/*/*",
-      "changeProcessCWD": true
-    }
-  ],
   "cSpell.words": [
     "bowser",
     "eslintcache",
@@ -28,7 +15,10 @@
     "Swappable",
     "Topup",
     "toruslabs",
+    "toniqlabs",
+    "toniq",
     "tsbuildinfo",
-    "umod"
+    "umod",
+    "localforage"
   ]
 }

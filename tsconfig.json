@@ -15,7 +15,8 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "paths": {
-      "@toruslabs/*": ["packages/*/src"]
+      "@toruslabs/*": ["packages/*/src"],
+      "@toniq-labs/*": ["packages/*/src"]
     }
   }
 }

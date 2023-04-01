@@ -1,13 +1,13 @@
 {
-  "name": "toruslabs",
+  "name": "@toniq-labs/open-login-sdk",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
-  "repository": "git@github.com:torusresearch/OpenLoginSdk.git",
+  "repository": "git@github.com:Toniq-Labs/OpenLoginSdk.git",
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "publish:lerna": "yarn clean && yarn bootstrap && lerna publish",
+    "publish:lerna": "npm run clean && npm run bootstrap && lerna publish",
     "just:publish:lerna": "lerna publish",
     "clean": "lerna clean --yes && lerna exec -- rimraf package-lock.json yarn.lock dist/ .rollup.cache/ tsconfig.build.tsbuildinfo .rts2_cache_{cjs,esm}/ toruslabs-*.tgz openlogin-*tgz .eslintcache",
     "build": "cross-env FORCE_COLOR=1 lerna run --stream build",
@@ -16,9 +16,9 @@
     "test": "cross-env FORCE_COLOR=1 lerna run test --parallel",
     "test-debugger": "cross-env FORCE_COLOR=1 lerna run test-debugger --parallel",
     "lint": "cross-env FORCE_COLOR=1 lerna run lint --parallel",
-    "pack:lerna": "lerna exec -- 'yarn pack'",
+    "pack:lerna": "lerna exec -- 'npm pack'",
     "pre-commit": "lerna run pre-commit",
-    "prepare": "husky install"
+    "test:types": "tsc-mono packages for-each tsc --noEmit"
   },
   "devDependencies": {
     "@babel/plugin-syntax-bigint": "^7.8.3",
@@ -40,7 +40,6 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-tsdoc": "^0.2.17",
-    "husky": "^8.0.3",
     "jsdom": "^21.1.1",
     "jsdom-global": "^3.0.2",
     "lerna": "^6.5.1",
@@ -50,6 +49,7 @@
     "prettier": "^2.8.4",
     "rimraf": "^4.4.0",
     "ts-node": "^10.9.1",
+    "tsc-mono": "^1.0.1",
     "tsconfig-paths": "^4.1.2",
     "tsconfig-paths-webpack-plugin": "^4.0.1",
     "tslib": "^2.5.0",

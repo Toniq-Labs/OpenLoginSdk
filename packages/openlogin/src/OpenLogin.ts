@@ -316,7 +316,7 @@ class OpenLogin {
     session._originData = this.state.originData;
     session._whiteLabelData = this.state.whiteLabel;
     session._loginConfig = this.state.loginConfig;
-    session._sessionId = this.state.store.get("sessionId");
+    session._sessionId = await this.state.store.get("sessionId");
     session._webauthnTransports = this.state.webauthnTransports;
 
     if (!session._sessionId) {
@@ -530,7 +530,7 @@ class OpenLogin {
 
   async getUserInfo(): Promise<OpenloginUserInfo> {
     if (this.privKey) {
-      const storeData = this.state.store.getStore();
+      const storeData = await this.state.store.getStore();
       const userInfo: OpenloginUserInfo = {
         email: (storeData.email as string) || "",
         name: (storeData.name as string) || "",

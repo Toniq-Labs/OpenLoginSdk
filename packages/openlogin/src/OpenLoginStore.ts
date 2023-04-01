@@ -1,65 +1,49 @@
-import { storeKey } from "./constants";
-import { IStore } from "./IStore";
-import { MemoryStore } from "./MemoryStore";
-import { localStorageAvailable, sessionStorageAvailable } from "./utils";
+import * as localForage from "localforage";
+import { defaultStoreKey } from "./constants";
 
 export default class OpenLoginStore {
   // eslint-disable-next-line no-use-before-define
   private static instance: OpenLoginStore;
 
-  public storage: IStore;
+  private internalStore = this.createInternalStore();
 
-  private _storeKey: string = storeKey;
+  private constructor(private currentStoreKey: string = defaultStoreKey) {}
 
-  private constructor(storage: IStore, _storeKey?: string) {
-    this.storage = storage;
-    this._storeKey = _storeKey || storeKey;
-    try {
-      if (!storage.getItem(_storeKey || storeKey)) {
-        this.resetStore();
-      }
-    } catch (error) {
-      // Storage is not available
-    }
-  }
-
-  static getInstance(storeNamespace: string, storageKey: "session" | "local" = "local"): OpenLoginStore {
+  public static getInstance(storeNamespace: string, _ignoredStorageKey: "session" | "local" = "local"): OpenLoginStore {
     if (!this.instance) {
-      let storage: Storage | MemoryStore = new MemoryStore();
-      if (storageKey === "local" && localStorageAvailable) {
-        storage = localStorage;
-      }
-      if (storageKey === "session" && sessionStorageAvailable) {
-        storage = sessionStorage;
-      }
-      const finalStoreKey = storeNamespace ? `${storeKey}_${storeNamespace}` : storeKey;
-      this.instance = new this(storage, finalStoreKey);
+      const finalStoreKey = storeNamespace ? `${defaultStoreKey}_${storeNamespace}` : defaultStoreKey;
+      this.instance = new this(finalStoreKey);
     }
     return this.instance;
   }
 
-  toJSON(): string {
-    return this.storage.getItem(this._storeKey);
+  public async getStore(): Promise<Record<string, unknown>> {
+    const allKeys = await this.internalStore.keys();
+    const entries = await Promise.all(
+      allKeys.map(async (key) => {
+        return [key, await this.internalStore.getItem(key)];
+      })
+    );
+
+    return Object.fromEntries(entries);
   }
 
-  resetStore(): Record<string, unknown> {
-    const currStore = this.getStore();
-    this.storage.setItem(this._storeKey, JSON.stringify({}));
-    return currStore;
+  public async get<T>(key: string): Promise<T> {
+    return this.internalStore.getItem(this.currentStoreKey);
   }
 
-  getStore(): Record<string, unknown> {
-    return JSON.parse(this.storage.getItem(this._storeKey));
+  public set<T>(key: string, value: T): void {
+    this.internalStore.setItem(key, value);
   }
 
-  get<T>(key: string): T {
-    const store = JSON.parse(this.storage.getItem(this._storeKey));
-    return store[key];
+  public async clearStore() {
+    await this.internalStore.clear();
+    this.internalStore = this.createInternalStore();
   }
 
-  set<T>(key: string, value: T): void {
-    const store = JSON.parse(this.storage.getItem(this._storeKey));
-    store[key] = value;
-    this.storage.setItem(this._storeKey, JSON.stringify(store));
+  private createInternalStore(): LocalForage {
+    return localForage.createInstance({
+      storeName: this.currentStoreKey,
+    });
   }
 }
